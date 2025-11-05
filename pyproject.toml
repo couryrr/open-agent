@@ -9,3 +9,15 @@ dependencies = [
     "textual-dev>=1.7.0",
     "ollama>=0.6.0",
 ]
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+pythonpath = ["src"]
+filterwarnings = [
+    "error",
+]
