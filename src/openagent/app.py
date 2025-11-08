@@ -56,11 +56,11 @@ class OpenAgent():
     def add_provider_model(self, name: str, model: str) -> None:
         provider = self.providers.get(name, None)
         if not provider:
-            raise Exception(f"Provider {id} not found")
+            raise Exception(f"Provider {name} not found")
         provider.add_model(model)
 
     def remove_provider_model(self, name: str, model: str) -> None:
         provider = self.providers.get(name, None)
         if not provider:
-            raise Exception(f"Provider {id} not found")
+            raise Exception(f"Provider {name} not found")
         provider.remove_model(model)

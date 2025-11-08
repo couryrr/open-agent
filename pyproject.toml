@@ -1,14 +1,20 @@
 [project]
-name = "open-agent"
+name = "openagent"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
+authors = [
+    { name = "Coury Richards", email = "2702992+couryrr@users.noreply.github.com" }
+]
 requires-python = ">=3.12"
 dependencies = [
     "textual[syntax]>=6.3.0",
     "textual-dev>=1.7.0",
     "ollama>=0.6.0",
 ]
+
+[project.scripts]
+openagent = "openagent:main"
 
 [dependency-groups]
 dev = [
@@ -21,3 +27,7 @@ pythonpath = ["src"]
 filterwarnings = [
     "error",
 ]
+
+[build-system]
+requires = ["uv_build>=0.8.18,<0.9.0"]
+build-backend = "uv_build"
