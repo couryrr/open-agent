@@ -503,6 +503,8 @@ version = "0.1.0"
 source = { editable = "." }
 dependencies = [
     { name = "ollama" },
+    { name = "platformdirs" },
+    { name = "pydantic" },
     { name = "textual", extra = ["syntax"] },
     { name = "textual-dev" },
 ]
@@ -515,6 +517,8 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "ollama", specifier = ">=0.6.0" },
+    { name = "platformdirs", specifier = ">=4.4.0" },
+    { name = "pydantic", specifier = ">=2.11.9" },
     { name = "textual", extras = ["syntax"], specifier = ">=6.3.0" },
     { name = "textual-dev", specifier = ">=1.7.0" },
 ]

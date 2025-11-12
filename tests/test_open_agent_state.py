@@ -9,10 +9,10 @@ def test_open_agent_can_init():
 
 def test_open_agent_can_add_provider():
     oa = OpenAgent()
-    assert len(oa.providers) == 0
+    assert len(oa.state.providers) == 0
     provider = OpenAgentProvider(name="1")
     oa.add_provider(provider)
-    assert len(oa.providers) == 1
+    assert len(oa.state.providers) == 1
 
 
 def test_open_agent_can_add_multiple_providers():
@@ -20,7 +20,7 @@ def test_open_agent_can_add_multiple_providers():
     for i in range(5):
         provider = OpenAgentProvider(name=str(i))
         oa.add_provider(provider)
-    assert len(oa.providers.keys()) == 5
+    assert len(oa.state.providers.keys()) == 5
 
 
 def test_open_agent_can_remove_provider():
@@ -28,9 +28,9 @@ def test_open_agent_can_remove_provider():
     oa = OpenAgent()
     provider = OpenAgentProvider(name=name)
     oa.add_provider(provider)
-    assert len(oa.providers) == 1
+    assert len(oa.state.providers) == 1
     oa.remove_provider(name=name)
-    assert len(oa.providers) == 0
+    assert len(oa.state.providers) == 0
 
 
 def test_open_agent_removes_correct_provider():
@@ -38,11 +38,11 @@ def test_open_agent_removes_correct_provider():
     for i in range(5):
         provider = OpenAgentProvider(name=str(i))
         oa.add_provider(provider)
-    assert len(oa.providers) == 5
+    assert len(oa.state.providers) == 5
     oa.remove_provider(name="4")
-    assert len(oa.providers.keys()) == 4
+    assert len(oa.state.providers.keys()) == 4
     assert [str(i) for i in range(4)] == [
-        provider for provider in oa.providers.keys()]
+        provider for provider in oa.state.providers.keys()]
 
 
 def test_open_agent_removes_correct_providers():
@@ -50,11 +50,12 @@ def test_open_agent_removes_correct_providers():
     for i in range(5):
         provider = OpenAgentProvider(name=str(i))
         oa.add_provider(provider)
-    assert len(oa.providers) == 5
+    assert len(oa.state.providers) == 5
     oa.remove_provider(name="4")
     oa.remove_provider(name="2")
-    assert len(oa.providers) == 3
-    assert ["0", "1", "3"] == [provider for provider in oa.providers.keys()]
+    assert len(oa.state.providers) == 3
+    assert ["0", "1", "3"] == [
+        provider for provider in oa.state.providers.keys()]
 
 
 def test_open_agent_can_add_model_to_provider():
@@ -139,3 +140,27 @@ def test_open_agent_cant_remove_model_from_non_existent_provider():
     assert len(provider.models) == 1
     with pytest.raises(Exception):
         open_agent.remove_provider_model(name="2", model="some_llm_name")
+
+
+def test_open_agent_can_list_providers():
+    open_agent = OpenAgent()
+    assert len(open_agent.state.providers) == 0
+    for i in range(5):
+        name = f"agent_{i}"
+        open_agent.add_provider(OpenAgentProvider(name=name))
+    assert len(open_agent.state.providers) == 5
+    assert [provider.name for provider in open_agent.list_providers()] == [
+        f"agent_{i}" for i in range(5)]
+
+
+def test_open_agent_can_list_sessions():
+    open_agent = OpenAgent()
+    assert len(open_agent.state.sessions) == 0
+    for i in range(5):
+        session_name = f"session_{i}"
+        name = f"agent_{i}"
+        open_agent.create_session(
+            name=session_name, provider=OpenAgentProvider(name=name))
+    assert len(open_agent.state.sessions) == 5
+    assert [session.name for session in open_agent.list_sessions()] == [
+        f"session_{i}" for i in range(5)]

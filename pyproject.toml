@@ -11,6 +11,8 @@ dependencies = [
     "textual[syntax]>=6.3.0",
     "textual-dev>=1.7.0",
     "ollama>=0.6.0",
+    "platformdirs>=4.4.0",
+    "pydantic>=2.11.9",
 ]
 
 [project.scripts]

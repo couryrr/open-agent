@@ -61,3 +61,11 @@ messages=[SystemMessage(type='user', message='What is 32 minus 2?'),
           SystemMessage(type='assistant', message='I apologize for  error. Let me fix that and try again.\n{"name": "subtract_two_numbers", "arguments": {"a": 55, "b": 2}}')
 ])
 ```
+
+### Notes:
+
+uv can setup a package that can be ran with uv run. The llm tried a lot of tasks for installing the module and
+using pip. Even with the context that uv was used from the start.
+
+This article was super useful:
+https://note.nkmk.me/en/python-uv-cli-tool/

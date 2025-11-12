@@ -2,14 +2,14 @@ from openagent import OpenAgentProvider
 
 
 def test_can_add_model():
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="provider_1")
     assert len(provider.models) == 0
     provider.add_model("some_llm_name")
     assert len(provider.models) == 1
 
 
 def test_cannot_add_same_model():
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="provider_1")
     assert len(provider.models) == 0
     provider.add_model("some_llm_name")
     provider.add_model("some_llm_name")
@@ -17,7 +17,7 @@ def test_cannot_add_same_model():
 
 
 def test_can_add_multiple_models():
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="provider_1")
     assert len(provider.models) == 0
     for i in range(5):
         provider.add_model(f"some_llm_name_{i}")
@@ -25,7 +25,7 @@ def test_can_add_multiple_models():
 
 
 def test_can_remove_model():
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="1")
     assert len(provider.models) == 0
     provider.add_model("some_llm_name")
     assert len(provider.models) == 1
@@ -35,7 +35,7 @@ def test_can_remove_model():
 
 def test_can_remove_multiple_models():
     # TODO: Find a better way to test set equality
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="provider_1")
     assert len(provider.models) == 0
     for i in range(5):
         provider.add_model(f"some_llm_name_{i}")
@@ -47,7 +47,7 @@ def test_can_remove_multiple_models():
 
 
 def test_can_remove_non_existent_model():
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="provider_1")
     assert len(provider.models) == 0
     provider.add_model("some_llm_name")
     assert len(provider.models) == 1
@@ -56,7 +56,7 @@ def test_can_remove_non_existent_model():
 
 
 def test_can_delete_all_models():
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="provider_1")
     assert len(provider.models) == 0
     for i in range(5):
         provider.add_model(f"some_llm_name_{i}")
@@ -74,7 +74,7 @@ def test_can_delete_all_models():
 
 
 def test_can_remove_on_empty_model():
-    provider = OpenAgentProvider("1")
+    provider = OpenAgentProvider(name="provider_1")
     assert len(provider.models) == 0
     provider.remove_model("some_llm_name")
     assert len(provider.models) == 0

@@ -1,66 +1,49 @@
-from typing import Any, Dict, List, Optional, Set
-import datetime
+import os
+from typing import List, Optional
 import uuid
+from .state import OpenAgentState
+from .session import OpenAgentSession
+from .provider import OpenAgentProvider
+from pydantic import BaseModel
 
 
-class OpenAgentContext():
-    def __init__(self):
-        self.role: str
-        self.text: str
-        self.fn: List[Dict[str, Any]]
-        self.extra: Dict[str, Any]
-        self.create_at: datetime.datetime
+class OpenAgent(BaseModel):
+    state: OpenAgentState = OpenAgentState()
 
+    def save(self):
+        if self.state.data_dir:
+            with open(os.path.join(self.state.data_dir, "data.json"), "w") as file:
+                file.write(self.model_dump_json())
 
-class OpenAgentProvider():
-    def __init__(self, name: str) -> None:
-        self.name = name
-        self.models: Set[str] = set([])
-        self.auth: Optional[str]
-        self.url: Optional[str]
-        self.port: Optional[int]
-
-    def add_model(self, model: str):
-        self.models.add(model)
-
-    def remove_model(self, model: str):
-        self.models = set([m for m in self.models if m != model])
-
-
-class OpenAgentSession():
-    def __init__(self, id: str, name: str, provider: OpenAgentProvider) -> None:
-        self.id = id
-        self.name = name
-        self.provider = provider
-        self.context: List[OpenAgentContext] = []
-
-
-class OpenAgent():
-    def __init__(self) -> None:
-        self.sessions: Dict[str, OpenAgentSession] = {}
-        self.providers: Dict[str, OpenAgentProvider] = {}
-
-    def create_session(self, name: Optional[str], provider: OpenAgentProvider):
+    def create_session(self, provider: OpenAgentProvider, name: Optional[str] = None) -> None:
         if not name:
             name = "something strange"
         session_id = str(uuid.uuid4())
-        self.sessions[session_id] = OpenAgentSession(
+        self.state.sessions[name] = OpenAgentSession(
             id=session_id, name=name, provider=provider)
 
-    def add_provider(self, provider: OpenAgentProvider):
-        self.providers[provider.name] = provider
+    def list_sessions(self):
+        return list(self.state.sessions.values())
+
+    def add_provider(self, provider: OpenAgentProvider) -> None:
+        if self.state.providers.get(provider.name):
+            raise Exception(f"Provider {provider.name} already exists")
+        self.state.providers[provider.name] = provider
+
+    def list_providers(self) -> List[OpenAgentProvider]:
+        return list(self.state.providers.values())
 
     def remove_provider(self, name: str) -> None:
-        self.providers.pop(name)
+        self.state.providers.pop(name)
 
     def add_provider_model(self, name: str, model: str) -> None:
-        provider = self.providers.get(name, None)
+        provider = self.state.providers.get(name, None)
         if not provider:
             raise Exception(f"Provider {name} not found")
         provider.add_model(model)
 
     def remove_provider_model(self, name: str, model: str) -> None:
-        provider = self.providers.get(name, None)
+        provider = self.state.providers.get(name, None)
         if not provider:
             raise Exception(f"Provider {name} not found")
         provider.remove_model(model)
