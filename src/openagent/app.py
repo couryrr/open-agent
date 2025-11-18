@@ -1,10 +1,13 @@
 import os
-from typing import List, Optional
 import uuid
-from .state import OpenAgentState
-from .session import OpenAgentSession
-from .provider import OpenAgentProvider
+from typing import List, Optional
+
 from pydantic import BaseModel
+
+from .tooling import OpenAgentTooling
+from .provider import OpenAgentProvider
+from .session import OpenAgentSession
+from .state import OpenAgentState
 
 
 class OpenAgent(BaseModel):
@@ -15,12 +18,15 @@ class OpenAgent(BaseModel):
             with open(os.path.join(self.state.data_dir, "data.json"), "w") as file:
                 file.write(self.model_dump_json())
 
-    def create_session(self, provider: OpenAgentProvider, name: Optional[str] = None) -> None:
+    def create_session(
+        self, provider: OpenAgentProvider, name: Optional[str] = None
+    ) -> None:
         if not name:
             name = "something strange"
         session_id = str(uuid.uuid4())
         self.state.sessions[name] = OpenAgentSession(
-            id=session_id, name=name, provider=provider)
+            id=session_id, name=name, provider=provider
+        )
 
     def list_sessions(self):
         return list(self.state.sessions.values())
@@ -47,3 +53,8 @@ class OpenAgent(BaseModel):
         if not provider:
             raise Exception(f"Provider {name} not found")
         provider.remove_model(model)
+
+    def tool_create_provider_script(self, name: str) -> None:
+        tooling = OpenAgentTooling()
+        if self.state.data_dir:
+            tooling.create_provider_script(directory=self.state.data_dir, file_name=name)
