@@ -26,6 +26,7 @@ def main():
         "--create-provider-script",
         help="create a script for a provider",
     )
+    parser.add_argument("--smoke-test-provider", help="smoke test a provider")
     parser.add_argument(
         "--list-providers", action="store_true", help="list all providers"
     )
@@ -74,3 +75,5 @@ def main():
             [print(provider.name) for provider in agent.list_providers()]
         if args.list_sessions:
             [print(session.name) for session in agent.list_sessions()]
+        if args.smoke_test_provider:
+            agent.tool_smoke_test_provider(args.smoke_test_provider)

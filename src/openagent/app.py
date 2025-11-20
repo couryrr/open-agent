@@ -58,3 +58,9 @@ class OpenAgent(BaseModel):
         tooling = OpenAgentTooling()
         if self.state.data_dir:
             tooling.create_provider_script(directory=self.state.data_dir, file_name=name)
+
+    def tool_smoke_test_provider(self, name: str) -> None:
+        tooling = OpenAgentTooling()
+        if self.state.data_dir:
+            tooling.smoke_test(directory=self.state.data_dir, file_name=name)
+
