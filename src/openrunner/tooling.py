@@ -12,7 +12,7 @@ class YourProtocol(Protocol):
         print("smoke test passed")
 
 
-class OpenAgentTooling:
+class OpenRunnerTooling:
     def __init__(self):
         self.providers = "providers"
 
@@ -20,7 +20,7 @@ class OpenAgentTooling:
         provider_directory = os.path.join(directory, self.providers)
         file_path = os.path.join(provider_directory, f"{file_name}.py")
         if os.path.exists(file_path):
-            raise OpenAgentToolingError(f"File {file_path} already exists")
+            raise OpenRunnerToolingError(f"File {file_path} already exists")
 
         if not os.path.exists(provider_directory):
             os.makedirs(provider_directory)
@@ -32,7 +32,7 @@ class OpenAgentTooling:
         provider_directory = os.path.join(directory, self.providers)
         file_path = os.path.join(provider_directory, file_name)
         if not os.path.exists(file_path):
-            raise OpenAgentToolingError(f"File {file_path} does not exist")
+            raise OpenRunnerToolingError(f"File {file_path} does not exist")
 
         # Extract module name from filename (remove .py)
         module_name = file_name.removesuffix(".py")
@@ -57,5 +57,5 @@ class OpenAgentTooling:
         p.smoke_test()
 
 
-class OpenAgentToolingError(Exception):
+class OpenRunnerToolingError(Exception):
     pass

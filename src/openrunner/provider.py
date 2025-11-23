@@ -3,7 +3,7 @@ from typing import Optional, Set
 from pydantic import BaseModel
 
 
-class OpenAgentProvider(BaseModel):
+class OpenRunnerProvider(BaseModel):
     name: str
     models: Set[str] = set([])
     auth: Optional[str] = None
