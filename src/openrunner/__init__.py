@@ -4,14 +4,14 @@ import os
 
 from platformdirs import user_data_dir
 
-from .app import OpenAgent as OpenAgent
-from .context import OpenAgentContext as OpenAgentContext
-from .provider import OpenAgentProvider as OpenAgentProvider
-from .session import OpenAgentSession as OpenAgentSession
+from .app import OpenRunner as OpenRunner
+from .context import OpenRunnerContext as OpenRunnerContext
+from .provider import OpenRunnerProvider as OpenRunnerProvider
+from .session import OpenRunnerSession as OpenRunnerSession
 
 
 def main():
-    appname = "openagent"
+    appname = "openrunner"
     appauthor = "nextbubble"
     parser = argparse.ArgumentParser()
     parser.add_argument("--create-session", help="create a new session")
@@ -48,13 +48,13 @@ def main():
 
     with open(os.path.join(data_dir, "data.json"), "r") as file:
         args = parser.parse_args()
-        agent = OpenAgent.model_validate(json.load(file))
+        agent = OpenRunner.model_validate(json.load(file))
         # FIXME: Not sure if this should be set
         agent.state.data_dir = data_dir
 
         if args.create_session:
             agent.create_session(
-                OpenAgentProvider(name="ollama"), name=f"{args.create_session}"
+                OpenRunnerProvider(name="ollama"), name=f"{args.create_session}"
             )
 
         if args.add_provider:
@@ -62,7 +62,7 @@ def main():
             url = input("Enter provider url: ")
             port = input("Enter provider port: ")
             # auth = input("Enter provider auth: ")
-            agent.add_provider(OpenAgentProvider(name=name, url=url, port=port))
+            agent.add_provider(OpenRunnerProvider(name=name, url=url, port=port))
 
         if args.remove_provider:
             agent.remove_provider(args.remove_provider)
