@@ -4,7 +4,7 @@ from typing import Any, Dict, List
 from pydantic import BaseModel
 
 
-class OpenAgentContext(BaseModel):
+class OpenRunnerContext(BaseModel):
     role: str
     text: str
     fn: List[Dict[str, Any]]
