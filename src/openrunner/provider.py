@@ -1,4 +1,4 @@
-from typing import Optional, Set
+from typing import Set
 
 from pydantic import BaseModel
 
@@ -6,9 +6,9 @@ from pydantic import BaseModel
 class OpenRunnerProvider(BaseModel):
     name: str
     models: Set[str] = set([])
-    auth: Optional[str] = None
-    url: Optional[str] = None
-    port: Optional[str] = None
+    auth: str | None = None
+    url: str | None = None
+    port: str | None = None
 
     def add_model(self, model: str):
         self.models.add(model)

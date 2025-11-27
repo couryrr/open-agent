@@ -8,7 +8,7 @@ from openrunner import OpenRunner, OpenRunnerProvider
 def open_runner():
     os.makedirs("temp")
     open_runner = OpenRunner()
-    open_runner.state.data_dir = "temp"
+    # open_runner.state.data_dir = "temp"
     yield open_runner
     os.rmdir("temp")
 
@@ -161,7 +161,7 @@ def test_open_runner_can_list_sessions(open_runner):
 
 def test_open_runner_can_create_provider_script(open_runner):
     open_runner.tool_create_provider_script(name="test")
-    assert os.path.exists(os.path.join(open_runner.state.data_dir, "providers", "test.py"))
-    os.remove(os.path.join(open_runner.state.data_dir, "providers", "test.py"))
-    os.rmdir(os.path.join(open_runner.state.data_dir, "providers"))
+    assert os.path.exists(os.path.join("temp", "providers", "test.py"))
+    os.remove(os.path.join("temp", "providers", "test.py"))
+    os.rmdir(os.path.join("temp", "providers"))
 

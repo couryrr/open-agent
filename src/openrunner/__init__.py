@@ -40,7 +40,12 @@ def main():
         help="remove a model from a provider",
     )
 
+    #TODO: Load config from file
+    #TODO: Set config file or use default
     data_dir = user_data_dir(appname, appauthor)
+    runner = OpenRunner()
+    runner.state.load_config()
+
     if not os.path.exists(data_dir):
         os.makedirs(data_dir)
         with open(os.path.join(data_dir, "data.json"), "w") as file:
@@ -49,9 +54,6 @@ def main():
     with open(os.path.join(data_dir, "data.json"), "r") as file:
         args = parser.parse_args()
         agent = OpenRunner.model_validate(json.load(file))
-        # FIXME: Not sure if this should be set
-        agent.state.data_dir = data_dir
-
         if args.create_session:
             agent.create_session(
                 OpenRunnerProvider(name="ollama"), name=f"{args.create_session}"

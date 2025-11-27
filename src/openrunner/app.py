@@ -1,22 +1,19 @@
-import os
 import uuid
 from typing import List, Optional
 
 from pydantic import BaseModel
 
-from .tooling import OpenRunnerTooling
 from .provider import OpenRunnerProvider
 from .session import OpenRunnerSession
 from .state import OpenRunnerState
+from .tooling import OpenRunnerTooling
 
 
 class OpenRunner(BaseModel):
     state: OpenRunnerState = OpenRunnerState()
 
     def save(self):
-        if self.state.data_dir:
-            with open(os.path.join(self.state.data_dir, "data.json"), "w") as file:
-                file.write(self.model_dump_json())
+        self.state.save()
 
     def create_session(
         self, provider: OpenRunnerProvider, name: Optional[str] = None
@@ -56,11 +53,6 @@ class OpenRunner(BaseModel):
 
     def tool_create_provider_script(self, name: str) -> None:
         tooling = OpenRunnerTooling()
-        if self.state.data_dir:
-            tooling.create_provider_script(directory=self.state.data_dir, file_name=name)
-
-    def tool_smoke_test_provider(self, name: str) -> None:
-        tooling = OpenRunnerTooling()
-        if self.state.data_dir:
-            tooling.smoke_test(directory=self.state.data_dir, file_name=name)
-
+        tooling.create_provider_script(
+            directory=self.state.config["data_dir"], file_name=name
+        )
